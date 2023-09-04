@@ -1,4 +1,46 @@
+import { useRef, useEffect } from "react";
+
 const Home = () => {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    // const chairsContainer = document.querySelector(".chairs_and_tables");
+
+    const loggedIn = {
+      name: "Manik Garg",
+      emp_id: "M26398",
+    };
+
+    const entries = [];
+
+    const element = ref.current;
+
+    element.addEventListener("click", function (e) {
+      if (e.target.classList.contains("chair")) {
+        if (
+          entries.find(function (entry) {
+            return entry.name === loggedIn.name;
+          })
+        ) {
+          alert(
+            "Sorry you can only book one seat on single day! You can delete today's entry and select another chair!"
+          );
+        } else {
+          e.target.style.fill = "green";
+          loggedIn["chair_id"] = e.target.dataset.id;
+          loggedIn["date_created"] = new Date();
+          loggedIn["for_date"] = new Date(
+            loggedIn["date_created"].getYear(),
+            loggedIn["date_created"].getMonth(),
+            loggedIn["date_created"].getDate() + 1
+          );
+          console.log(loggedIn);
+          entries.push(loggedIn);
+        }
+      }
+    });
+  }, []);
+
   return (
     <div class="wrapper-svg">
       <svg
@@ -52,6 +94,7 @@ const Home = () => {
         version="1.1"
         class="chairs_and_tables"
         xmlns="http://www.w3.org/2000/svg"
+        ref={ref}
       >
         <circle class="chair" cx="232" cy="409" r="10" data-id="1"></circle>
         <circle class="chair" cx="593" cy="214" r="10" data-id="2"></circle>
